@@ -10,13 +10,12 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <array>
 using namespace std;
 
 Deck::Deck() : topCard(0) {
     // Define ranks and suits using array
-	array<char, 13> ranks = {'A', '2', '3', '4', '5', '6', '7', '8', '9','T', 'J', 'Q', 'K'};
-	array<char, 4> suits = {'C', 'S', 'D', 'H'};
+	char ranks[] = {'A', '2', '3', '4', '5', '6', '7', '8', '9','T', 'J', 'Q', 'K'};
+	char suits[] = {'C', 'S', 'D', 'H'};
 
 	int index = 0;
     // Initialize deck array with 52 cards
