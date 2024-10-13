@@ -1,3 +1,10 @@
+// Name: Kevin Van
+// Class: CECS 325-02
+// Program 3 - Sort Contest
+// Due Date: 10/15/2024
+//
+// I certify that this program is my own original work. I did not copy any part of this program from
+// any other source. I further certify that I typed each and every line of code in this program
 
 #include <fstream>
 #include <iostream>
@@ -23,12 +30,12 @@ int main(int argc, char *argv[]) {
   ofstream fout;
   int n;
   int index = 0;
-  const int max = 1000000;
-  int A[max];
+  const int MAX = 1000000;
+  int A[MAX];
 
   fin.open(argv[1]);
   fout.open(argv[2], ios::out | ios::trunc);
-  while (fin >> n && index < max) {
+  while (fin >> n && index < MAX) {
     A[index] = n;
     index++;
   }
