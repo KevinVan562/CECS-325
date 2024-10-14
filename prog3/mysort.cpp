@@ -11,7 +11,7 @@
 using namespace std;
 
 void bubble(int A[], int size) {
-  cout << "Starting Bubble Sort" << endl;
+  cout << "Starting Array bubble sort with " << size << " items" << endl;
   for (int i = 0; i < size - 1; i++) {
     for (int j = 0; j < size - i - 1; j++) {
       if (A[j] > A[j + 1]) {
@@ -21,7 +21,7 @@ void bubble(int A[], int size) {
       }
     }
   }
-  cout << "Bubble Sort Finished" << endl;
+  cout << "Ending bubble sort" << endl;
 }
 
 int main(int argc, char *argv[]) {

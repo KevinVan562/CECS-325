@@ -5,14 +5,14 @@ argv[2] -100000
 argv[3] 100000
 Starting system sort
 
-real	0m0.175s
-user	0m0.502s
-sys	0m0.082s
+real	0m0.177s
+user	0m0.470s
+sys	0m0.094s
 Starting mysort
-Starting Bubble Sort
-Bubble Sort Finished
+Starting Array bubble sort with 1000000 items
+Ending bubble sort
 
-real	30m58.853s
-user	30m57.152s
+real	44m24.255s
+user	30m32.273s
 sys	0m1.580s
 1000000 1000000 6387702 mysort.out
