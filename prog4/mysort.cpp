@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
     ifstream fin(argv[1]);
     ofstream fout(argv[2], ios::out | ios::trunc);
     if (!fin.is_open() || !fout.is_open()) {
-        cerr << "Error opening file." << endl;
+        cerr << "Error opening file" << endl;
         return 1;
     }
 
@@ -96,7 +96,11 @@ int main(int argc, char *argv[]) {
     // Create threads to sort sections of the array
     for (int i = 0; i < THREADS; i++) {
         int left = i * SECTIONS;
-        int right = (i == THREADS - 1) ? index : (i + 1) * SECTIONS;
+        int right = (i + 1) * SECTIONS;
+        if (i == THREADS - 1) {
+            right = index;
+        }
+
         threads[i] = thread(bubble, A + left, right - left, "Process " + to_string(i + 1));
     }
     
