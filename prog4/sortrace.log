@@ -9,34 +9,34 @@ argv[2] -1000000
 argv[3] 1000000
 Starting system sort
 
-real	0m0.186s
-user	0m0.564s
-sys	0m0.077s
+real	0m0.180s
+user	0m0.477s
+sys	0m0.091s
 Starting my sort
-Process 14 swap count: 977606979
+Process 7 swap count: 981170839
 Process 9 swap count: 974971268
-Process 4 swap count: 971640175
-Process 11 swap count: 977892221
-Process 10 swap count: 974816065
-Process 16 swap count: 973186205
 Process 5 swap count: 979999910
-Process 12 swap count: 978683350
-Process 6 swap count: 979063499
-Process 2 swap count: 977596160
 Process 15 swap count: 975884685
 Process 8 swap count: 977195348
+Process 6 swap count: 979063499
+Process 4 swap count: 971640175
+Process 10 swap count: 974816065
 Process 13 swap count: 974496297
+Process 2 swap count: 977596160
+Process 12 swap count: 978683350
+Process 11 swap count: 977892221
 Process 1 swap count: 974752987
+Process 14 swap count: 977606979
+Process 16 swap count: 973186205
 Process 3 swap count: 972121430
-Process 7 swap count: 981170839
 Total swaps: 15621077418
 
-real	0m15.770s
-user	3m23.992s
-sys	0m1.526s
--rw-rw-r-- 1 kevan kevan 7389039 Oct 26 20:18 systemsort.out
--rw-rw-r-- 1 kevan kevan 7389039 Oct 26 20:18 mysort.out
+real	0m25.216s
+user	5m45.770s
+sys	0m1.535s
+-rw-rw-r-- 1 kevan kevan 7389039 Oct 30 22:46 systemsort.out
+-rw-rw-r-- 1 kevan kevan 7389039 Oct 30 22:47 mysort.out
 Comparing systemsort.out to mysort.out
 All done with diff compare
 =======End=======
-Sat Oct 26 08:18:21 PM PDT 2024
+Wed Oct 30 10:47:23 PM PDT 2024

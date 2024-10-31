@@ -72,6 +72,11 @@ void merge(int *arr, int left, int mid, int right) {
 }
 
 int main(int argc, char *argv[]) {
+    if (!(argc == 3 || argc == 4)) {
+        cout << "Please Enter 2 or 3 parameters: " << endl;
+        cout << "<input> <output> [-test]" << endl;
+    }
+
     ifstream fin(argv[1]);
     ofstream fout(argv[2], ios::out | ios::trunc);
     if (!fin.is_open() || !fout.is_open()) {
@@ -81,12 +86,21 @@ int main(int argc, char *argv[]) {
 
     int n;
     int index = 0;
+    const int MAX_TEST = 10000;
     const int MAX = 1000000;
-    int* A = new int[MAX];
-
-    // Read numbers from the input file
-    while (fin >> n && index < MAX) {
-        A[index++] = n;
+    int* A;
+    
+    // Depends on the command line argument, if -test is a parameter it will use 10,000 numbers else 1,000,000
+    if (argc == 4 && string(argv[3]) == "-test") {
+        A = new int[MAX_TEST];
+        while (fin >> n && index < MAX_TEST) {
+            A[index++] = n;
+        }
+    } else {
+        A = new int[MAX];
+        while (fin >> n && index < MAX) {
+            A[index++] = n;
+        }
     }
 
     const int THREADS = 16;
