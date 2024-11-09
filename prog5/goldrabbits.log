@@ -1,0 +1,96 @@
+    0: GoldRabbits( 0) =           1  fiboCount:          1
+    0: GoldRabbits( 1) =           1  fiboCount:          2
+    0: GoldRabbits( 2) =           2  fiboCount:          5
+    0: GoldRabbits( 3) =           3  fiboCount:          8
+    0: GoldRabbits( 4) =           5  fiboCount:         11
+    0: GoldRabbits( 5) =           8  fiboCount:         14
+    0: GoldRabbits( 6) =          13  fiboCount:         17
+    0: GoldRabbits( 7) =          21  fiboCount:         20
+    0: GoldRabbits( 8) =          34  fiboCount:         23
+    0: GoldRabbits( 9) =          55  fiboCount:         26
+    0: GoldRabbits(10) =          89  fiboCount:         29
+    0: GoldRabbits(11) =         144  fiboCount:         32
+    0: GoldRabbits(12) =         233  fiboCount:         35
+    0: GoldRabbits(13) =         377  fiboCount:         38
+    0: GoldRabbits(14) =         610  fiboCount:         41
+    0: GoldRabbits(15) =         987  fiboCount:         44
+    0: GoldRabbits(16) =        1597  fiboCount:         47
+    0: GoldRabbits(17) =        2584  fiboCount:         50
+    0: GoldRabbits(18) =        4181  fiboCount:         53
+    0: GoldRabbits(19) =        6765  fiboCount:         56
+    0: GoldRabbits(20) =       10946  fiboCount:         59
+    0: GoldRabbits(21) =       17711  fiboCount:         62
+    0: GoldRabbits(22) =       28657  fiboCount:         65
+    0: GoldRabbits(23) =       46368  fiboCount:         68
+    0: GoldRabbits(24) =       75025  fiboCount:         71
+    0: GoldRabbits(25) =      121393  fiboCount:         74
+    0: GoldRabbits(26) =      196418  fiboCount:         77
+    0: GoldRabbits(27) =      317811  fiboCount:         80
+    0: GoldRabbits(28) =      514229  fiboCount:         83
+    0: GoldRabbits(29) =      832040  fiboCount:         86
+    0: GoldRabbits(30) =     1346269  fiboCount:         89
+    0: GoldRabbits(31) =     2178309  fiboCount:         92
+    0: GoldRabbits(32) =     3524578  fiboCount:         95
+    0: GoldRabbits(33) =     5702887  fiboCount:         98
+    0: GoldRabbits(34) =     9227465  fiboCount:        101
+    0: GoldRabbits(35) =    14930352  fiboCount:        104
+    0: GoldRabbits(36) =    24157817  fiboCount:        107
+    0: GoldRabbits(37) =    39088169  fiboCount:        110
+    0: GoldRabbits(38) =    63245986  fiboCount:        113
+    0: GoldRabbits(39) =   102334155  fiboCount:        116
+    0: GoldRabbits(40) =   165580141  fiboCount:        119
+    0: GoldRabbits(41) =   267914296  fiboCount:        122
+    0: GoldRabbits(42) =   433494437  fiboCount:        125
+    0: GoldRabbits(43) =   701408733  fiboCount:        128
+    0: GoldRabbits(44) =  1134903170  fiboCount:        131
+    0: GoldRabbits(45) =  1836311903  fiboCount:        134
+    0: GoldRabbits(46) = 
+Overflow at(46)
+Fibo Map
+--------
+0: 1
+1: 1
+2: 2
+3: 3
+4: 5
+5: 8
+6: 13
+7: 21
+8: 34
+9: 55
+10: 89
+11: 144
+12: 233
+13: 377
+14: 610
+15: 987
+16: 1597
+17: 2584
+18: 4181
+19: 6765
+20: 10946
+21: 17711
+22: 28657
+23: 46368
+24: 75025
+25: 121393
+26: 196418
+27: 317811
+28: 514229
+29: 832040
+30: 1346269
+31: 2178309
+32: 3524578
+33: 5702887
+34: 9227465
+35: 14930352
+36: 24157817
+37: 39088169
+38: 63245986
+39: 102334155
+40: 165580141
+41: 267914296
+42: 433494437
+43: 701408733
+44: 1134903170
+45: 1836311903
