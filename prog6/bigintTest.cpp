@@ -128,6 +128,9 @@ class BigInt {
 
         void print() {
             string str = "";
+            if (isNegative) {
+                str += '-';
+            }
             for (int i = 0; i < v.size(); i++) {
                 str += v[i];
             }
@@ -138,20 +141,18 @@ class BigInt {
             return v.size();
         }
 
-        BigInt fibo(BigInt) {
-            return fiboHelper(*this);
+        BigInt fibo(BigInt n) {
+            return fiboHelper(n);
         }
 
-        BigInt fact(BigInt) {
-            if (*this == BigInt(0))
+        BigInt fact(BigInt n) {
+            if (n == BigInt(0))
                 return BigInt(1);
-            BigInt i(*this);
-            BigInt fact(1);
-            while ((*this / i) != *this) {
-                fact = fact * 1;
-                i = i - 1;
-            }
-            return fact;
+            BigInt result(1);
+                for (BigInt i(1); i <= n; i = i + BigInt(1)) {
+                    result = result * i;
+                }
+            return result;
         }
 
         friend ostream& operator<<(ostream& os, const BigInt& bi) {
@@ -190,36 +191,44 @@ class BigInt {
         }
 };
 
-BigInt::BigInt(string num) {
+BigInt::BigInt(int num) {
     v = vector<char>();
-    if (num == "0") {
-        v = {'0'};
-        isNegative = false;
-        return;
-    }
-    if (num[0] == '-') {
+    bool isNegative = false;
+    if (num < 0) {
         isNegative = true;
-        num = num.substr(1);
+        num *= -1;
     }
-    for (char ch : num) {
-        if (('0' <= ch && ch <= '9')) {
-            v.push_back(ch);
-        } else {
-            throw invalid_argument ("String has non-numeric input");
+
+    if (num == 0) {
+        v.push_back('0');
+    } else {
+        while (num > 0) {
+            v.push_back((num % 10) + '0');
+            num /= 10;
         }
     }
+
+    if (isNegative) {
+        v.push_back('-');
+    }
+    reverse(v.begin(), v.end());
 }
 
-BigInt::BigInt(int num) {
-    if (num == 0) { 
-        v.push_back(0);
-        isNegative = false;
-    } else {
-        isNegative = num < 0;
-        num = abs(num);
-        while (num > 0) {
-            v.insert(v.begin(), (num % 10) + '0');
-            num /= 10;
+BigInt::BigInt(string str) {
+    v = vector<char>();
+    if (str == "0") {
+        v = vector<char>{'0'};
+        return;
+    }
+    if (str[0] == '-') {
+        v.push_back('-');
+    }
+    for (char ch : str) {
+        if (('0' <= ch && ch <= '9')) {
+            v.push_back(ch);
+        }
+        else if (ch != '-') { 
+            throw invalid_argument ("String contains non-numeric input");
         }
     }
 }
@@ -307,12 +316,12 @@ BigInt BigInt::operator%(BigInt other) {
 
 BigInt BigInt::operator++(int) {
     BigInt temp(*this);
-    *this = *this + 1;
+    *this = *this + BigInt(1);
     return temp;
 }
 
 BigInt BigInt::operator++() {
-    *this = *this + 1;
+    *this = *this + BigInt(1);
     return *this;
 }
 
@@ -508,15 +517,15 @@ void testUnit()
     BigInt imax = INT_MAX;
     BigInt big("9223372036854775807");
     // display variables
-    cout << "n1(int) :"<<setw(space)<<n1<<endl;
-    cout << "s1(str) :"<<setw(space)<<s1<<endl;
-    cout << "n2(int) :"<<setw(space)<<n2<<endl;
-    cout << "s2(str) :"<<setw(space)<<s2<<endl;
-    cout << "n3(n2) :"<<setw(space)<<n3<<endl;
+    cout << "n1(int)    :"<<setw(space)<<n1<<endl;
+    cout << "s1(str)    :"<<setw(space)<<s1<<endl;
+    cout << "n2(int)    :"<<setw(space)<<n2<<endl;
+    cout << "s2(str)    :"<<setw(space)<<s2<<endl;
+    cout << "n3(n2)     :"<<setw(space)<<n3<<endl;
     cout << "fibo(12345):"<<setw(space)<<fibo<<endl;
-    cout << "fact(50) :"<<setw(space)<<fact<<endl;
-    cout << "imax :"<<setw(space)<<imax<<endl;
-    cout << "big :"<<setw(space)<<big<<endl;
+    cout << "fact(50)   :"<<setw(space)<<fact<<endl;
+    cout << "imax       :"<<setw(space)<<imax<<endl;
+    cout << "big        :"<<setw(space)<<big<<endl;
     cout << "big.print(): "; big.print(); cout << endl;
     cout << n2 << "/"<< n1<< " = "<< n2/n1 <<" rem "<<n2%n1<<endl;
     cout << "fibo("<<fibo<<") = "<<fibo.fibo(1) << endl;
