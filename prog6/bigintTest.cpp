@@ -404,16 +404,11 @@ class BigInt{
             return fiboHelper(*this);
         }
         
-        BigInt fact() { 
+        BigInt fact() {
             if (*this == BigInt(0))
                 return BigInt(1);
-            BigInt i(*this);
-            BigInt fact(1);
-            while ((*this / i) != *this) {
-                fact = fact * i;
-                i = i - 1;
-            }
-            return fact;
+
+            return *this * (BigInt(*this - 1).fact());
         }
          
         friend ostream& operator<<(ostream& os, const BigInt& bi) {
