@@ -1,7 +1,7 @@
 // Kevin Van
 // CECS 325-02
-// Prog 6 – BigInt
-// Due Date (12/01/2024)
+// Prog 6 – Big Integers
+// Due Date (12/10/2024)
 //
 // I certify that this program is my own original work. I did not copy any part of this program from
 // any other source. I further certify that I typed each and every line of code in this program.
@@ -28,11 +28,10 @@ class BigInt{
         }
     public:
         BigInt(){
-            v = vector<char>();
+            vector<char> v;
         }
     
         BigInt(string str) {
-            v.clear();
             isNegative = false;
 
             if (str == "0") {
@@ -50,27 +49,26 @@ class BigInt{
 
             for (char ch : v) {
                 if (!isdigit(ch)) {
-                    throw invalid_argument("Contains non-numeric characters");
+                    throw invalid_argument("Non-numeric characters");
                 }
             }
         } 
 
-        BigInt(int num) {
-            v.clear();
-            isNegative = false;
-
-            if (num < 0) {
-                isNegative = true;
-                num = -num;
-            } else if (num == 0) {
+        BigInt(int n) {
+            if (n == 0) {
                 v.push_back('0');
                 return;
             }
 
-            while (num > 0) {
-                char ch = '0' + (num % 10);
-                v.push_back(ch);
-                num /= 10;
+            bool isNegative = n < 0;
+            if (isNegative) {
+                n = -n;
+            }
+
+            while (n > 0) {
+                char digit = '0' + (n % 10);
+                v.push_back(digit);
+                n /= 10;
             }
 
             if (isNegative) {
@@ -80,79 +78,94 @@ class BigInt{
             reverse(v.begin(), v.end());
         }
     
-        BigInt operator+(BigInt other){
-            if (*this < BigInt(0)){ // This is negative
-                BigInt t(*this);
-                t.v.erase(t.v.begin()); // Erase negative
-                return other - t; // -x + y == y - x
+        BigInt operator+(BigInt other) {
+            if (v[0] == '-' && other.v[0] != '-') {
+                BigInt t = *this;
+                t.v.erase(t.v.begin());
+                return other - t;
             }
-            if (other < BigInt(0)){// Other is negative
-                BigInt o(other);
-                o.v.erase(o.v.begin()); // Erase negative
-                return (*this - o); // x + -y == x - y
+
+            if (v[0] != '-' && other.v[0] == '-') {
+                BigInt o = other;
+                o.v.erase(o.v.begin());
+                return *this - o;
             }
-            
+
+            if (v[0] == '-' && other.v[0] == '-') {
+                BigInt t = *this;
+                BigInt o = other;
+                t.v.erase(t.v.begin());
+                o.v.erase(o.v.begin());
+
+                int carry = 0;
+                string result = "";
+                int i = t.v.size() - 1, j = o.v.size() - 1;
+
+                while (i > 0 || j >= 0 || carry) {
+                    int sum = carry;
+                    if (i >= 0)
+                        sum += t.v[i--] - '0';
+                    if (j >= 0)
+                        sum += o.v[j--] - '0';
+                    carry = sum / 10;
+                    result = char(sum % 10 + '0') + result;
+                }
+                return BigInt("-" + result);
+            }
+
             int carry = 0;
             string result = "";
-            int i = size() - 1;
-            int j = other.size() - 1;
+            int i = v.size() - 1, j = other.v.size() - 1;
 
-            while (i >= 0 || j >= 0 || carry){ 
+            while (i >= 0 || j >= 0 || carry) {
                 int sum = carry;
-                if (i >= 0){ 
-                    sum += int(v[i]) - 48; // Convert char into int and add to sum
-                    i--; 
-                }
-                if (j >= 0){ 
-                    sum += int(other[j]) - 48;  // Convert char to int and add to sum
-                    j--; 
-                }
+                if (i >= 0)
+                    sum += v[i--] - '0';
+                if (j >= 0)
+                    sum += other.v[j--] - '0';
                 carry = sum / 10;
-                sum = sum % 10;
-                result = char(sum + 48) + result; 
+                result = char(sum % 10 + '0') + result;
             }
-            
             return BigInt(result);
         }
     
-        BigInt operator- (BigInt other){
-            if (*this < BigInt(0)){ // This is negative
+        BigInt operator-(BigInt other) {
+            if (*this < BigInt(0)){
                 BigInt t(*this);
                 t.v.erase(t.v.begin());
-                return ((t + other) * BigInt(-1)); // -x - y == (x + y) * -1
+                return ((t + other) * BigInt(-1));
             }
-            if (other < BigInt(0)){// Other is negative
+
+            if (other < BigInt(0)) {
                 BigInt o(other);
                 o.v.erase(o.v.begin());
-                return (*this + o); // x - -y == x + y
+                return (*this + o);
             }
-            // Both are positive
+
             if (*this < other){
-                return ((other - *this) * BigInt(-1));
+                return ((other-*this) * BigInt(-1));
             }
 
             int carry = 0;
-            int i = size() - 1;
-            int j = other.size() - 1;
+            int i = size()-1, j = other.size() - 1;
             string result = "";
             
             while (i >= 0 || j >= 0){ 
                 int sub = 0;
                 if (i >= 0){ 
-                    sub = int(v[i])-48; 
+                    sub = v[i] - '0'; 
                     i--; 
                 }
-                sub -= carry; // Subtract any carry
+                sub -= carry;
                 if (j >= 0){ 
-                    sub -= int(other[j]) - 48; // Subtract other digit from sub
+                    sub -= other.v[j] - '0';
                     j--; 
                 }
-                carry = sub < 0; // If sub is negative, set carry to 1 else 0
-                sub = (sub + 10) % 10; // If sub is positive, get one's place
-                result = char(sub + 48) + result;
+                carry = sub < 0;
+                sub = (sub + 10) % 10;
+                result = char(sub + '0') + result;
             }
             
-            //remove preceding 0's
             while (result[0] == '0' && result.size() > 1){ 
                 result.erase(result.begin()); 
             }
@@ -163,64 +176,84 @@ class BigInt{
             return *this - BigInt(other); 
         }
         
-        BigInt operator+ (int other) {
-            return *this + BigInt(other); 
+        BigInt operator*(BigInt other) {
+            if (*this == BigInt(0) || other == BigInt(0)) {
+                return BigInt(0);
+            }
+
+            bool isNegative = (v[0] == '-' || other.v[0] == '-') && !(*this < BigInt(0) && other < BigInt(0));
+            BigInt t = *this;
+            BigInt o = other;
+
+            if (v[0] == '-') {
+                t.v.erase(t.v.begin());
+            }
+
+            if (other.v[0] == '-') {
+                o.v.erase(o.v.begin());
+            }
+
+            int n = t.v.size();
+            int m = o.v.size();
+            vector<int> product(n + m, 0);
+
+            for (int i = n - 1; i >= 0; --i) {
+                int digit1 = t.v[i] - '0';
+                for (int j = m - 1; j >= 0; --j) {
+                    int digit2 = o.v[j] - '0';
+                    int mult = digit1 * digit2;
+                    int pos = i + j + 1;
+
+                    product[pos] += mult;
+                    if (product[pos] >= 10) {
+                        product[pos - 1] += product[pos] / 10;
+                       product[pos] %= 10; 
+                    }
+                }
+            }
+
+            string result;
+            for (int i = 0; i < product.size(); ++i) {
+                if (!(result.empty() && product[i] == 0)) {
+                    result += (product[i] + '0');
+                }
+            }
+
+            if (result.empty()) {
+                result = "0";
+            }
+
+            if (isNegative) {
+                result = "-" + result;
+            }
+
+            return BigInt(result);
         }
     
-        BigInt operator*(BigInt other) {
-            string v1(v.begin(), v.end()), v2(other.v.begin(), other.v.end());
-            bool isNegative = (v1[0] == '-' ^ v2[0] == '-');
-    
-            if (v1[0] == '-')
-                v1.erase(v1.begin());
-            if (v2[0] == '-')
-                v2.erase(v2.begin());
-
-            int len1 = v1.size(), len2 = v2.size();
-            vector<int> result(len1 + len2, 0);
-
-            for (int i = len1 - 1; i >= 0; --i) {
-                for (int j = len2 - 1; j >= 0; --j) {
-                    int mul = (v1[i] - '0') * (v2[j] - '0');
-                    mul += result[i + j + 1];
-                    result[i + j + 1] = mul % 10; // Current digit
-                    result[i + j] += mul / 10;  // Carry
-                }
-            }
-
-            // Convert result to string
-            string res;
-            for (int num : result) {
-                if (!(res.empty() && num == 0)) { // Skip leading zeros
-                    res.push_back(num + '0');
-                }
-            }
-            if (res.empty()) res = "0"; // Handle 0 multiplication
-            if (isNegative && res != "0") res.insert(res.begin(), '-');
-            return BigInt(res);
-}
-
-
-    
         BigInt operator/(BigInt other) {
-            if (other == BigInt(0)){ 
+            if (other == BigInt(0)){
                 throw invalid_argument("Division by zero!");
-            } else if (other == BigInt(1)) { 
+            } 
+            else if (other == BigInt(1)) { 
                 return *this;
-            } else if (other == BigInt(-1)) { // Same result as multiply by -1
+            } 
+            else if (other == BigInt(-1)) { 
                 return *this * BigInt(-1);
-            } else if (*this < BigInt(0)) { // This is negative
+            } 
+            else if (*this < BigInt(0)) { 
                 BigInt t(*this);
                 t.v.erase(t.v.begin());
-                return ((t / other) * BigInt(-1)); // -x / y == (x / y) * -1
-            } else if (other < BigInt(0)) { // Other is negative
+                return ((t / other) * BigInt(-1)); 
+            } 
+            else if (other < BigInt(0)) { 
                 BigInt o(other);
                 o.v.erase(o.v.begin());
-                return ((*this / o) * BigInt(-1)); // x / -y == (x / y) * -1
-            } else {    // Both are positive
+                return ((*this / o) * BigInt(-1));
+            } 
+            else {    
                 BigInt counter(0);
                 BigInt sub(*this);
-                while(sub >= other){ // Repeated subtraction
+                while(sub >= other){ 
                     counter = counter + 1;
                     sub = sub - other;
                 }
@@ -228,14 +261,14 @@ class BigInt{
             } 
         }
         
-        BigInt operator% (BigInt other){
+        BigInt operator% (BigInt other) {
             if(other == BigInt(0)){ 
                 throw invalid_argument("Division by zero!");
             }
-            else if(other == BigInt(1) || other == BigInt(-1)){ 
+            else if(other == BigInt(1) || other == BigInt(-1)) { 
                 return BigInt(0);
             }
-            else if(*this > BigInt(0) && other > BigInt(0)){ // Both are positive
+            else if(*this > BigInt(0) && other > BigInt(0)) { 
                 BigInt counter(0);
                 BigInt sub(*this);
                 while(sub >= other){
@@ -244,7 +277,7 @@ class BigInt{
                 return sub;
                 
             }
-            else if(*this < BigInt(0) && other < BigInt(0)){ // Both are negative
+            else if(*this < BigInt(0) && other < BigInt(0)) { 
                 BigInt counter(0);
                 BigInt sub(*this);
                 while(sub <= other){
@@ -252,17 +285,17 @@ class BigInt{
                 }
                 return sub;
             }
-            else{   // Opposing signs
-                if(*this < other){// This is negative, other is positive
+            else{
+                if(*this < other){
                     BigInt temp(*this);
                     while(temp < BigInt(0)){
                         temp = temp + other;
                     }
                     return temp;
                 }
-                else{   // This is positive, other is negative
+                else{
                     BigInt temp(*this);
-                    BigInt o(other*BigInt(-1)); // Make other positive
+                    BigInt o(other * BigInt(-1)); 
                     while(temp > BigInt(0)){
                         temp = temp - o;
                     }
@@ -271,94 +304,78 @@ class BigInt{
             }
         }
         
-        BigInt operator++(int){
+        BigInt operator++(int) {
             BigInt temp(*this);
             *this = *this + 1;
             return temp;
         }
     
-        BigInt operator++(){
+        BigInt operator++() {
             *this = *this + 1;
             return *this;
             
         }
     
-        char operator[](int index){					// index function
+        char operator[](int index) {					// index function
             return v[index];
         }
     
-        bool operator==(BigInt other){
-            if (v.size () != other.size ()){
+        bool operator==(BigInt other) {
+            if (v.size () != other.size ()) {
                 return false;
             }
-            for (int i = 0; i < size (); i++){
-                if (v[i] != other[i]){
+            for (int i = 0; i < size (); i++) {
+                if (v[i] != other[i]) {
                     return false;
                 }
             }
             return true;
         }
         
-        bool operator!= (BigInt other){
+        bool operator!= (BigInt other) {
             return !(*this == other);
         }
         
-        bool operator<(BigInt other){
-            if(v[0] == '-'){ // This is negative
-                if(other[0] != '-'){ // Other is positive
+        bool operator<(BigInt other) {
+            if (v[0] == '-') {
+                if (other[0] != '-') {
                     return true;
                 }
-                // Both negative
-                else if(v.size() < other.size()){ // This has less digits
-                    return false;
+                if (v.size() != other.size()) {
+                    return v.size() > other.size();
                 }
-                else if(v.size() > other.size()){// This has more digits
-                   return true;
+
+                for (int i = 0; i < v.size(); i++) {
+                    if (v[i] < other[i])
+                        return false;
+                    if (v[i] > other [i])
+                        return true;
                 }
-                // Both are of equal size
-                else{
-                    for(int i = 0; i < size(); i++){
-                        if(v[i] < other[i]){ // This digit is smaller
-                            return false;
-                        }
-                        else if(v[i] > other[i]){ // This digit is larger
-                            return true;
-                        }
-                    }
-                    return false; // Equal
-                }
+                return false;
+            }    
+
+            if (other[0] == '-') {
+                return false;
             }
-            else{ // This is positive
-                if(other[0] == '-'){ // Other is negative
-                    return false;
-                }
-                // Both positive
-                else if(v.size() < other.size()){ // This has less digits
+
+            if (v.size() != other.size()) {
+                return v.size() < other.size();
+            }
+
+            for (int i = 0; i < v.size(); i++) {
+                if (v[i] < other[i])
                     return true;
-                }
-                else if(v.size() > other.size()){// This has more digits
-                   return false;
-                }
-                // Both are of equal size
-                else{
-                    for(int i = 0; i < size(); i++){
-                        if(v[i] < other[i]){ // This digit is smaller
-                            return true;
-                        }
-                        else if(v[i] > other[i]){ // This digit is larger
-                            return false;
-                        }
-                    }
-                    return false; // Equal
-                }
+                if (v[i] > other[i])
+                    return false;
             }
-        }
-        
-        bool operator<=(BigInt other){  // Less than OR equal to
+            return false;
+        }       
+
+        bool operator<=(BigInt other) { 
             return (*this < other) || (*this == other);
         }
         
-        bool operator>(BigInt other){   // Greater than == !less than
+        bool operator>(BigInt other) { 
             if(*this == other){
                 return false;
             }
@@ -367,7 +384,7 @@ class BigInt{
             }
         }
         
-        bool operator>=(BigInt other){
+        bool operator>=(BigInt other) {
             return (*this > other) || (*this == other);
         }
     
@@ -387,7 +404,7 @@ class BigInt{
             return fiboHelper(*this);
         }
         
-        BigInt fact(){ 
+        BigInt fact() { 
             if (*this == BigInt(0))
                 return BigInt(1);
             BigInt i(*this);
@@ -407,7 +424,7 @@ class BigInt{
                 }
                 output << bi.v[0];
                 output << '.';
-                for (size_t i = 1; i < min(size_t(7), bi.v.size()); ++i) {
+                for (int i = 1; i < min(7, static_cast<int>(bi.v.size())); ++i) {
                     output << bi.v[i];
                 }
                 output << 'e';
@@ -428,31 +445,31 @@ class BigInt{
         }           	   
 }; 
 	   
-void testUnit (){
-   int space = 10;
-   cout << "\a\nTestUnit:\n" << flush;
-   system ("whoami"); 
-   system ("date");
-   // initialize variables
-   BigInt n1 (25);
-   BigInt s1 ("25");
-   BigInt n2 (1234);
-   BigInt s2 ("1234");
-   BigInt n3 (n2);
-   BigInt fibo (12345);
-   BigInt fact (50);
-   BigInt imax = INT_MAX; BigInt big ("9223372036854775807");
-   // display variables
-   cout << "n1(int) :" << setw (space) << n1 << endl;
-   cout << "s1(str) :" << setw (space) << s1 << endl;
-   cout << "n2(int) :" << setw (space) << n2 << endl;
-   cout << "s2(str) :" << setw (space) << s2 << endl;
-   cout << "n3(n2) :" << setw (space) << n3 << endl;
-   cout << "fibo(12345):" << setw (space) << fibo << endl;
-   cout << "fact(50) :" << setw (space) << fact << endl;
-   cout << "imax :" << setw (space) << imax << endl;
-   cout << "big :" << setw (space) << big << endl;
-   cout << "big.print(): "; big.print (); cout << endl;
+void testUnit () {
+  int space = 10;
+  cout << "\a\nTestUnit:\n" << flush;
+  system ("whoami"); 
+  system ("date");
+  // initialize variables
+  BigInt n1 (25);
+  BigInt s1 ("25");
+  BigInt n2 (1234);
+  BigInt s2 ("1234");
+  BigInt n3 (n2);
+  BigInt fibo (12345);
+  BigInt fact (50);
+  BigInt imax = INT_MAX; BigInt big ("9223372036854775807");
+  // display variables
+  cout << "n1(int) :" << setw (space) << n1 << endl;
+  cout << "s1(str) :" << setw (space) << s1 << endl;
+  cout << "n2(int) :" << setw (space) << n2 << endl;
+  cout << "s2(str) :" << setw (space) << s2 << endl;
+  cout << "n3(n2) :" << setw (space) << n3 << endl;
+  cout << "fibo(12345):" << setw (space) << fibo << endl;
+  cout << "fact(50) :" << setw (space) << fact << endl;
+  cout << "imax :" << setw (space) << imax << endl;
+  cout << "big :" << setw (space) << big << endl;
+  cout << "big.print(): "; big.print (); cout << endl;
   cout << n2 << "/"<< n1<< " = "<< n2/n1 <<" rem "<<n2%n1<<endl;
   cout << "fibo("<<fibo<<") = "<<fibo.fibo() << endl;
   cout << "fact("<<fact<<") = "<<fact.fact() << endl;
@@ -465,7 +482,6 @@ void testUnit (){
   cout << "big * s2 = ? --> "<< big * s2<<endl;
 }
 
-int main ()
-{
+int main () {
     testUnit();
 }
